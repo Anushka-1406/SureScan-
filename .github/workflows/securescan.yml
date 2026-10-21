@@ -1,0 +1,20 @@
+name: SecureScan
+
+on: [push, pull_request]
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Scan for hardcoded secrets
+        run: python securescan.py . --exclude test_samples
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: securescan-report
+          path: securescan_report.json
