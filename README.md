@@ -15,7 +15,11 @@ A small Python tool that scans source code for hardcoded secrets (passwords, API
 
 ## GitHub Actions
 `.github/workflows/securescan.yml` runs the scan on every push and pull request.
+## What it checks
+1. Hardcoded secrets: regex scan (securescan.py)
+2. Vulnerable dependencies: pip-audit and npm audit in the GitHub Actions pipeline
 
 ## Limitations
 - Regex can give false positives and miss secrets that do not match a pattern.
 - Next steps: entropy detection, dependency checks, pre-commit hook.
+- Next steps: entropy detection, scanning git history, pre-commit hook.

@@ -7,11 +7,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+
       - name: Scan for hardcoded secrets
         run: python securescan.py . --exclude test_samples
+
+      - name: Check Python dependencies (pip-audit)
+        if: always() && hashFiles('requirements.txt') != ''
+        run: |
+          pip install pip-audit
+          pip-audit -r requirements.txt
+
+      - name: Check Node dependencies (npm audit)
+        if: always() && hashFiles('package.json') != ''
+        run: npm audit --audit-level=high
+
       - name: Upload report
         if: always()
         uses: actions/upload-artifact@v4
